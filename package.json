@@ -1,0 +1,17 @@
+{
+  "name": "sensorkoffer",
+  "version": "1.0.0",
+  "description": "Display sensors data",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hugo I. Ramirez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.5.0"
+  }
+}
