@@ -2,10 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 
-const app = express();
+const entities = require('./routes/api/entities')
 
-// Bodyparser Middleware
-app.use(bodyParser.json());
+// set up express app
+const app = express();
 
 // DB Config
 const db = require('./config/keys').mongoURI
@@ -15,6 +15,17 @@ mongoose
     .connect(db)
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err))
+
+// Middleware Body Parser
+app.use(bodyParser.json());
+
+// Middleware Route Handlers
+app.use('/api/entities', entities)
+
+// Middleware Error Handling
+app.use(function(err, req, res, next){
+    res.status(422).send({error: err.message})
+})
 
 const port = process.env.PORT || 4000;
 
