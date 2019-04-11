@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 
 const entities = require('./routes/api/entities')
 
+const udpServer = require('./udpServer')
+
 // set up express app
 const app = express();
 
@@ -12,7 +14,7 @@ const db = require('./config/keys').mongoURI
 
 // Connect to Mongo
 mongoose
-    .connect(db)
+    .connect(db, { useNewUrlParser: true, useCreateIndex: true, })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err))
 
