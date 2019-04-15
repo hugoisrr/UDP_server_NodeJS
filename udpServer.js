@@ -1,5 +1,5 @@
 const dgram = require('dgram')
-const parserUDP = require('./paserUDP')
+const parserUDP = require('./parserUDP')
 const udpServer = dgram.createSocket('udp4')
 
 // Error Message
