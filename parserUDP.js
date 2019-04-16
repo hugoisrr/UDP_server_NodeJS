@@ -37,11 +37,9 @@ module.exports = function (message) {
         values: arrayOfValues
     })
 
-    event.save(function (err, eventValues) {
+    event.save(function (err, event) {
         if(err) return console.error(err)
-        console.log(eventValues.deviceId + " saved in events collection")
+        console.log(`Event with Device id: ${event.deviceId} with the number of values of ${event.numberValues} saved in events collection`)        
     })
 
-    // TODO insert error handling when validates the length of the content
-  
 }

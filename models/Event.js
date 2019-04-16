@@ -11,6 +11,10 @@ const ValueSchema = new Schema({
 const EventSchema = new Schema({
     numberValues: Number,
     deviceId: Number,
+    time: {
+        type: Date,
+        default: Date.now
+    },
     values: [ValueSchema]
 })
 
