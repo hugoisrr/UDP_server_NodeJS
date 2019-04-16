@@ -11,7 +11,7 @@ udpServer.on('error', (err) => {
 // Server receives package message
 udpServer.on('message', (msg, rinfo) => {
     parserUDP(msg.toString('utf8'))
-    console.log(`UDP server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+    // console.log(`UDP server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
 })
 
 // UDP server announces which address and port is listening

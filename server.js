@@ -12,6 +12,9 @@ const app = express();
 // DB Config
 const db = require('./config/keys').mongoURI
 
+// ES6 Promises
+mongoose.Promise = global.Promise
+
 // Connect to Mongo
 mongoose
     .connect(db, { useNewUrlParser: true, useCreateIndex: true, })

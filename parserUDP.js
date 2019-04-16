@@ -7,16 +7,8 @@
  = Each event has 2 Bytes = 1 Byte for Value && 1 Byte for for Delay                                         =
  = 00060015xxxxxxkl00000100xxxxxxkx10100100xxxxxxxx00000100xxxyxxxy00000100xxxxxxxx00000100xxxyxxxy00000100  =
  ============================================================================================================*/
+const Event = require('./models/Event')
 
- /**
-  * 
-  * @param {Number of values} contentLength 
-  * @param {Device's ID} deviceId 
-  */
- function HeadArrayOfEvents(contentLength, deviceId) {
-     this.contentLength = contentLength,
-     this.deviceId = deviceId
- }
  /**
   * 
   * @param {Value of the event} value 
@@ -32,24 +24,24 @@ module.exports = function (message) {
     const contentLength = Number(message.slice(0,4))
     const deviceId = Number(message.slice(5,8))
     const arrContent = content.match(/.{8}/g)
-    const arrayHeadAndEvents = []
+    
+    const arrayOfValues = []
+    for (let i = 0; i < arrContent.length; i++) {
+        arrayOfValues.push(new EventValue(arrContent[i], Number(arrContent[i+1])))
+        i++      
+    }        
+    
+    const event = new Event({
+        numberValues: contentLength,
+        deviceId: deviceId,
+        values: arrayOfValues
+    })
 
-    // Verifies the number of events are complete
-    if (contentLength === (arrContent.length/2)) {
-        
-        arrayHeadAndEvents.push(new HeadArrayOfEvents(contentLength, deviceId))
-        const arrayListOfEvents = []
-        for (let i = 0; i < arrContent.length; i++) {
-            arrayListOfEvents.push(new EventValue(arrContent[i], Number(arrContent[i+1])))
-            i = i+1        
-        }        
-        arrayHeadAndEvents.push(arrayListOfEvents)
-    }
+    event.save(function (err, eventValues) {
+        if(err) return console.error(err)
+        console.log(eventValues.deviceId + " saved in events collection")
+    })
 
-    console.log(JSON.stringify(arrayHeadAndEvents));
+    // TODO insert error handling when validates the length of the content
+  
 }
-
-/**
- * TODO insert JSON into the DB
- */
-
