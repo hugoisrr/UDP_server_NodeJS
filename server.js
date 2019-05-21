@@ -1,7 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
-
-const connectUDP = require('./udpServer');
+const connectUDP = require('./config/udpServer');
 
 const app = express();
 
@@ -16,6 +15,7 @@ app.use(express.json({ extended: false }));
 
 // Middleware Route Handlers
 app.use('/api/entities', require('./routes/api/entities'));
+app.use('/api/project', require('./routes/api/project'));
 
 // Middleware Error Handling
 app.use(function(err, req, res, next) {

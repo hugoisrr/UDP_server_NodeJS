@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://hugo123:hugo123@edgeconnector-e1zv3.mongodb.net/test?retryWrites=true",
+  "udpBind": 51235
+}

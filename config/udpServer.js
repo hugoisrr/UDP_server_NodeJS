@@ -1,6 +1,8 @@
 const dgram = require('dgram');
 const parserUDP = require('./parserUDP');
 const udpServer = dgram.createSocket('udp4');
+const config = require('config');
+const udpBind = config.get('udpBind');
 
 const connectUDP = async () => {
   try {
@@ -22,7 +24,7 @@ const connectUDP = async () => {
       console.log(`UDP server listening ${address.address}:${address.port}`);
     });
 
-    await udpServer.bind(51235);
+    await udpServer.bind(udpBind);
   } catch (err) {
     console.error(err.message);
     process.exit(1);

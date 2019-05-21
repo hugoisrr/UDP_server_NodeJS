@@ -7,7 +7,7 @@
  = Each event has 2 Bytes = 1 Byte for Value && 1 Byte for for Delay                                         =
  = 00060015xxxxxxkl00000100xxxxxxkx10100100xxxxxxxx00000100xxxyxxxy00000100xxxxxxxx00000100xxxyxxxy00000100  =
  ============================================================================================================*/
-const Event = require('./models/Event');
+const Event = require('../models/Event');
 
 /**
  *
