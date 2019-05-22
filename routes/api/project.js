@@ -4,6 +4,8 @@ const { check, validationResult } = require('express-validator/check');
 
 const Project = require('../../models/Project');
 
+/*----------  Project Routes  ----------*/
+
 /**
  * @route    POST api/project
  * @desc     Create or update project
@@ -101,6 +103,8 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+/*----------  Location Routes  ----------*/
+
 /**
  * @route    POST api/project/location/:id
  * @desc     Add location on a project
@@ -169,6 +173,8 @@ router.delete('/location/:id/:location_id', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+/*----------  Workstation Routes  ----------*/
 
 /**
  * @route    POST api/project/location/workstation/:id/:location_id
