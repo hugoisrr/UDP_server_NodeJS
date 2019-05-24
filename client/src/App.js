@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
+import ProjectForm from './components/FormContainer';
+import 'materialize-css/dist/css/materialize.min.css';
 import './App.css';
 
 const App = () => (
   <Fragment>
-    <h1>App</h1>
+    <ProjectForm />
   </Fragment>
 );
 
