@@ -1,0 +1,4 @@
+export const SET_ALERT = "SET_ALERT";
+export const REMOVE_ALERT = "REMOVE_ALERT";
+export const PROJECT_SUCCESS = "PROJECT_SUCCESS";
+export const PROJECT_FAILED = "PROJECT_FAILED";
