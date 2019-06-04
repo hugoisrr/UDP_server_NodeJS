@@ -11,7 +11,6 @@ const Project = require("../../models/Project");
  * @desc     Create or update project
  * @access   Public
  */
-//TODO verify that the name of the project doesn't repeat in DB
 router.post(
   "/",
   [
@@ -35,8 +34,13 @@ router.post(
 
       res.json(project);
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
+      if (err.code === 11000) {
+        console.error(err.message);
+        res.status(400).send("Project's name taken");
+      } else {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+      }
     }
   }
 );

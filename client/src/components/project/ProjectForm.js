@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { setAlert } from "../../actions/alert";
+import { Redirect } from "react-router-dom";
 import { createProject } from "../../actions/project";
 import PropTypes from "prop-types";
 
-const ProjectForm = ({ setAlert, createProject }) => {
+const ProjectForm = ({ createProject, isCreated }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: ""
@@ -19,6 +19,10 @@ const ProjectForm = ({ setAlert, createProject }) => {
     e.preventDefault();
     createProject({ name, description });
   };
+
+  // if (isCreated) {
+  //   return <Redirect to="/locations" />;
+  // }
 
   return (
     <Fragment>
@@ -66,11 +70,15 @@ const ProjectForm = ({ setAlert, createProject }) => {
 };
 
 ProjectForm.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-  createProject: PropTypes.func.isRequired
+  createProject: PropTypes.func.isRequired,
+  isCreated: PropTypes.bool
 };
 
+const mapStateToProps = state => ({
+  isCreated: state.project.isCreated
+});
+
 export default connect(
-  null,
-  { setAlert, createProject }
+  mapStateToProps,
+  { createProject }
 )(ProjectForm);

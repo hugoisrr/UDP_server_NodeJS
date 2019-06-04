@@ -1,4 +1,4 @@
-import { PROJECT_SUCCESS, PROJECT_FAILED } from "../actions/types";
+import { GET_PROJECT, PROJECT_ERROR } from "../actions/types";
 
 const initialState = {
   loading: true,
@@ -10,17 +10,18 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case PROJECT_SUCCESS:
+    case GET_PROJECT:
       return {
         ...state,
-        ...payload,
+        project: payload,
         isCreated: true,
         loading: false
       };
 
-    case PROJECT_FAILED:
+    case PROJECT_ERROR:
       return {
         ...state,
+        project: null,
         isCreated: false,
         loading: false
       };
