@@ -1,4 +1,5 @@
 import React from "react";
+import AddWorkstationForm from "./AddWorkstationForm";
 
 const LocWork = ({ locworks, deleteLocation, deleteWorkstation }) => {
   const locationsList = locworks.length ? (
