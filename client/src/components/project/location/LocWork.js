@@ -1,14 +1,18 @@
 import React from "react";
 
-const LocWork = ({ locworks }) => {
+const LocWork = ({ locworks, deleteLocation, deleteWorkstation }) => {
   const locationsList = locworks.length ? (
     locworks.map(location => {
       return (
         <li key={location.id} className="active">
           <div className="collapsible-header">
-            <a href="#!">
+            <span
+              onClick={() => {
+                deleteLocation(location.id);
+              }}
+            >
               <i className="material-icons">delete</i>
-            </a>
+            </span>
             {location.location}
           </div>
           <div className="collapsible-body">
@@ -22,7 +26,13 @@ const LocWork = ({ locworks }) => {
                     <li className="collection-item" key={workstation.id}>
                       <div>
                         {workstation.workstation}
-                        <a href="#!" className="secondary-content">
+                        <a
+                          href="#!"
+                          className="secondary-content"
+                          onClick={() => {
+                            deleteWorkstation(location.id, workstation.id);
+                          }}
+                        >
                           <i className="material-icons">delete</i>
                         </a>
                       </div>

@@ -43,11 +43,38 @@ class AddLocationsWorkstations extends Component {
       locations
     });
   };
+  deleteLocation = id => {
+    const locations = this.state.locations.filter(location => {
+      return location.id !== id;
+    });
+    this.setState({
+      locations
+    });
+  };
+  deleteWorkstation = (idLocation, idWorkstation) => {
+    this.setState(prevState => ({
+      locations: prevState.locations.map(location => {
+        if (location.id !== idLocation) {
+          return location;
+        }
+        return {
+          ...location,
+          workstations: location.workstations.filter(
+            workstation => workstation.id !== idWorkstation
+          )
+        };
+      })
+    }));
+  };
 
   render() {
     return (
       <div className="container section locations-list">
-        <LocWork locworks={this.state.locations} />
+        <LocWork
+          locworks={this.state.locations}
+          deleteLocation={this.deleteLocation}
+          deleteWorkstation={this.deleteWorkstation}
+        />
         <AddLocationsForm addLocation={this.addLocation} />
       </div>
     );
