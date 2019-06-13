@@ -4,12 +4,14 @@ import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProject from "./components/project/CreateProject";
 import ProjectDetails from "./components/project/ProjectDetails";
-import AddLocationsWorkstations from "./components/project/location/AddLocationsWorkstations";
+import AddWorkstations from "./components/project/workstation/AddWorkstations";
+import openSocket from "socket.io-client";
 import M from "materialize-css";
 
 class App extends Component {
   componentDidMount() {
     M.AutoInit();
+    openSocket("http://localhost:5000");
   }
   render() {
     return (
@@ -20,7 +22,7 @@ class App extends Component {
             <Route exact path="/" component={Dashboard} />
             <Route path="/project/:id" component={ProjectDetails} />
             <Route path="/create" component={CreateProject} />
-            <Route path="/locations" component={AddLocationsWorkstations} />
+            <Route path="/workstations" component={AddWorkstations} />
           </Switch>
         </div>
       </BrowserRouter>

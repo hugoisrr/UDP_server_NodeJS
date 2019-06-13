@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator/check");
+const io = require("../../config/socket");
 
 const Project = require("../../models/Project");
 
@@ -32,7 +33,7 @@ router.post(
 
       const project = await newProject.save();
 
-      res.json(project);
+      res.statuis(201).json(project);
     } catch (err) {
       if (err.code === 11000) {
         console.error(err.message);
@@ -108,17 +109,17 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-/*----------  Location Routes  ----------*/
+/*----------  Workstation Routes  ----------*/
 
 /**
- * @route    POST api/project/location/:id
- * @desc     Add location on a project
+ * @route    POST api/project/workstation/:id
+ * @desc     Add workstation on a project
  * @access   Public
  */
 router.post(
-  "/location/:id",
+  "/workstation/:id",
   [
-    check("location", "Location is required")
+    check("workstation", "workstation is required")
       .not()
       .isEmpty()
   ],
@@ -131,15 +132,18 @@ router.post(
     try {
       const project = await Project.findById(req.params.id);
 
-      const newLocation = {
-        location: req.body.location
+      const newWorkstation = {
+        workstation: req.body.workstation
       };
 
-      project.locations.unshift(newLocation);
+      const workstations = project.workstations.unshift(newWorkstation);
 
       await project.save();
-
-      res.json(project.locations);
+      io.getIO().emit("workstations", {
+        action: "create",
+        workstations: workstations
+      });
+      res.status(201).json(workstations);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -148,117 +152,62 @@ router.post(
 );
 
 /**
- * @route    DELETE api/project/location/:id/:location_id
- * @desc     Delete location from project
+ * @route    GET api/project/workstation/:id
+ * @desc     Get all workstations
  * @access   Public
  */
-router.delete("/location/:id/:location_id", async (req, res) => {
+router.get("/workstation/:id", async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
+    const workstations = project.workstations;
 
-    const location = project.locations.find(
-      location => location.id === req.params.location_id
-    );
-
-    if (!location) {
-      return res.status(404).json({ msg: "Location does not exist" });
+    if (!workstations.length) {
+      return res
+        .status(404)
+        .json({ msg: "There are no workstations in this project" });
     }
 
-    const removeIndex = project.locations
-      .map(location => location.id.toString())
-      .indexOf(req.params.location_id);
-
-    project.locations.splice(removeIndex, 1);
-
-    await project.save();
-
-    res.json(project.locations);
+    res.json(workstations);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-/*----------  Workstation Routes  ----------*/
-
 /**
- * @route    POST api/project/location/workstation/:id/:location_id
- * @desc     Add workstation on a location
+ * @route    DELETE api/project/workstation/:id/:workstation_id
+ * @desc     Delete workstation from project
  * @access   Public
  */
-router.post(
-  "/location/workstation/:id/:location_id",
-  [
-    check("workstation", "Workstation is required")
-      .not()
-      .isEmpty()
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+router.delete("/workstation/:id/:workstation_id", async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    const workstation = project.workstations.find(
+      workstation => workstation.id === req.params.workstation_id
+    );
+
+    if (!workstation) {
+      return res.status(404).json({ msg: "Workstation does not exist" });
     }
 
-    try {
-      const project = await Project.findById(req.params.id);
+    const removeIndex = project.workstations
+      .map(workstation => workstation.id.toString())
+      .indexOf(req.params.workstation_id);
 
-      const location = project.locations.find(
-        location => location.id === req.params.location_id
-      );
+    project.workstations.splice(removeIndex, 1);
 
-      if (!location) {
-        return res.status(404).json({ msg: "Location does not exist" });
-      }
+    await project.save();
 
-      const newWorkstation = {
-        workstation: req.body.workstation
-      };
-
-      location.workstations.unshift(newWorkstation);
-
-      await project.save();
-
-      res.json(location.workstations);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
+    if (!project.workstations.length) {
+      return res.json({ msg: "There are no workstations" });
+    } else {
+      res.json(project.workstations);
     }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
-);
-
-/**
- * @route    DELETE api/project/location/workstation/:id/:location_id/:workstation_id
- * @desc     Delete workstation from location
- * @access   Public
- */
-router.delete(
-  "/location/workstation/:id/:location_id/:workstation_id",
-  async (req, res) => {
-    try {
-      const project = await Project.findById(req.params.id);
-
-      const location = project.locations.find(
-        location => location.id === req.params.location_id
-      );
-
-      if (!location) {
-        return res.status(404).json({ msg: "Location does not exist" });
-      }
-
-      const removeIndex = location.workstations
-        .map(workstation => workstation.id.toString())
-        .indexOf(req.params.workstation_id);
-
-      location.workstations.splice(removeIndex, 1);
-
-      await project.save();
-
-      res.json(project.locations);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  }
-);
+});
 
 module.exports = router;

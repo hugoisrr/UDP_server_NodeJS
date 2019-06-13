@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const config = require('config');
-const db = config.get('mongoURI');
+const mongoose = require("mongoose");
+const config = require("config");
+const db = config.get("mongoURI");
 
 const connectDB = async () => {
   try {
@@ -10,11 +10,7 @@ const connectDB = async () => {
       useFindAndModify: false
     });
 
-    // TODO check database if project exist
-    // TODO if true => exit
-    // TODO else create => project with placeholder location
-
-    console.log('MongoDB Connected...');
+    console.log("MongoDB Connected...");
   } catch (err) {
     console.error(err.message);
     // Exit process with failure

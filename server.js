@@ -1,6 +1,7 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const connectUDP = require('./config/udpServer');
+const express = require("express");
+const connectDB = require("./config/db");
+const connectUDP = require("./config/udpServer");
+const socket = require("./config/socket");
 
 const app = express();
 
@@ -14,8 +15,8 @@ connectUDP();
 app.use(express.json({ extended: false }));
 
 // Middleware Route Handlers
-app.use('/api/entities', require('./routes/api/entities'));
-app.use('/api/project', require('./routes/api/project'));
+app.use("/api/entities", require("./routes/api/entities"));
+app.use("/api/project", require("./routes/api/project"));
 
 // Middleware Error Handling
 app.use(function(err, req, res, next) {
@@ -24,4 +25,12 @@ app.use(function(err, req, res, next) {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+const server = app.listen(port, () =>
+  console.log(`Server started on port ${port}`)
+);
+
+// Setup Socket io connection
+const io = socket.init(server);
+io.on("connection", socket => {
+  console.log("Client connected", socket.id);
+});
