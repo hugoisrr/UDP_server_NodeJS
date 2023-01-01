@@ -10,7 +10,7 @@
   "author": "Hugo I. Ramirez",
   "license": "ISC",
   "dependencies": {
-    "config": "^3.1.0",
+    "config": "^3.3.8",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "mongoose": "^5.5.8",
